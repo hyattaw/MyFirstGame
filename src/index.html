@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>My first game</title>
+  <meta name="keywords" content="tic-tac-toe game, JavaScript, HTML, practice page">
+  <meta name="description" content="This is the homepage for my first game written in JavaScript.">
+  <meta name="author" content="Drew Hyatt, hyattdh@outlook.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="./app/styles/style.css" type="text/css">
+</head>
+
+<body>
+
+  <head>
+    <h1>Tic-Tac-Toe</h1>
+  </head>
+  <div id="game"></div>
+  <p></p>
+  <!-- 
+<img src="./app/assets/tic-tac-toe.svg"/>
+-->
+
+
+  <button class="show-alert-button"
+    onclick="showCustomAlert('Bounding Box Properties', 'Left: 100, Top: 50, Width: 200, Height: 150')">Show Bounding
+    Box</button>
+
+  <!-- Custom alert -->
+  <div class="custom-alert" id="customAlert">
+    <h2 class="custom-alert-title" id="alertTitle"></h2>
+    <p id="alertContent"></p>
+    <button class="close-button" onclick="hideCustomAlert()">Close</button>
+  </div>
+
+
+
+
+
+
+
+  <div class="svg" id="svg"></div>
+
+  <script src="./game.js"></script>
+
+
+  <script>
+    function showCustomAlert(title, content) {
+      const alertBox = document.getElementById('customAlert');
+      const alertTitle = document.getElementById('alertTitle');
+      const alertContent = document.getElementById('alertContent');
+
+      alertTitle.textContent = title;
+      alertContent.textContent = content;
+      alertBox.style.display = 'block';
+    }
+
+    function hideCustomAlert() {
+      const alertBox = document.getElementById('customAlert');
+      alertBox.style.display = 'none';
+    }
+  </script>
+
+
+
+</body>
+
+</html>
