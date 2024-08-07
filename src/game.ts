@@ -6,7 +6,9 @@
 /*                                      */
 /****************************************/
 /// <reference lib="es2017.object" />
-import { SVG } from '@svgdotjs/svg.js';
+//import { SVG } from '@svgdotjs/svg.js';
+
+
 
 /****************************************/
 /*                                      */
@@ -33,7 +35,7 @@ class Num9x3 {
   matrix: number[][];
   constructor(values: number[][]) {
     if (values.length !== 9 || values.some(row => row.length !== 3)) {
-      throw new Error("Matrix must be 3x3.");
+      throw new Error("Matrix must be 9x3.");
     }
     this.matrix = values;
   }
@@ -82,9 +84,9 @@ function initializeGame(): [String3x3, Num9x3] {
   const turnTracker: Num9x3 = new Num9x3([
     [-1, -1, -1], //turn1: player, row, col
     [-1, -1, -1], //turn2: ...
-    [-1, -1, -1], // -1 indicates no entry
-    [-1, -1, -1], // col1: player0 / player1 
-    [-1, -1, -1],
+    [-1, -1, -1], // -1 initial values
+    [-1, -1, -1], // for Player: 1=player1; 2=player2 
+    [-1, -1, -1], // for row/col: 0..2 (0-indexed)
     [-1, -1, -1],
     [-1, -1, -1],
     [-1, -1, -1],
@@ -93,29 +95,45 @@ function initializeGame(): [String3x3, Num9x3] {
   return [theBoard, turnTracker]
 }
 
-function drawBoard(svgElement: any) {
+function drawBoard(divElement: any): any {
+  const strokeWidth: number = .01;
+  const strokeWidthHalf: number = strokeWidth/2;
+  const boardBackgroundColor: string = "#FF9999"
+  const player1Color: string = "#99FF99"
+  const player2Color: string = "#9999FF"
+
+  var svgElement: any;
   svgElement.setAttributeNS(null, "width", `${size}`); // Set the desired width
   svgElement.setAttributeNS(null, "height", `${size}`);
   svgElement.setAttributeNS(null, 'viewBox', `${view}`);
   svgElement.style.backgroundColor = "#f0f0f0";
 
   var g1 = document.createElementNS(svgNs, "g");
-  g1.setAttributeNS(null, "stroke", "black");
-  g1.setAttributeNS(null, "stroke-width", "1%");
+  g1.setAttributeNS(null,       "stroke", "black");
+  g1.setAttributeNS(null, "stroke-width", String(strokeWidth));
 
   var rectBorder = document.createElementNS(svgNs, "rect");
-  rectBorder.setAttributeNS(null, "x", "0");
-  rectBorder.setAttributeNS(null, "y", "0");
-  rectBorder.setAttributeNS(null, "width", "100%");
+  rectBorder.setAttributeNS(null,      "x", String(strokeWidthHalf));
+  rectBorder.setAttributeNS(null,      "y", String(strokeWidthHalf));
+  rectBorder.setAttributeNS(null,  "width", "100%");
   rectBorder.setAttributeNS(null, "height", "100%");
-  rectBorder.setAttributeNS(null, "fill", "pink");
+  rectBorder.setAttributeNS(null,   "fill", "pink");
   g1.appendChild(rectBorder);
+
+  var rect0 = document.createElementNS(svgNs, "rect");
+  rect0.setAttributeNS(null,      "x", String(strokeWidthHalf));
+  rect0.setAttributeNS(null,      "y", String(strokeWidthHalf));
+  rect0.setAttributeNS(null,  "width", String(33.33333 - strokeWidthHalf));
+  rect0.setAttributeNS(null, "height", String(33.33333 - strokeWidthHalf));
+  rect0.setAttributeNS(null,   "fill", "green");
+  g1.appendChild(rect0);
+
 
   var lineLeft = document.createElementNS(svgNs, "line");
   lineLeft.setAttributeNS(null, "x1", "33.3333%");
-  lineLeft.setAttributeNS(null, "y1", "0");
+  lineLeft.setAttributeNS(null, "y1",        "0");
   lineLeft.setAttributeNS(null, "x2", "33.3333%");
-  lineLeft.setAttributeNS(null, "y2", "100%");
+  lineLeft.setAttributeNS(null, "y2",     "100%");
   g1.appendChild(lineLeft);
 
   var lineRight = document.createElementNS(svgNs, "line");
@@ -142,7 +160,7 @@ function drawBoard(svgElement: any) {
   g1.appendChild(lineLower);
 
   svgElement.appendChild(g1);
-  divBtn.appendChild(svgElement);
+  divElement.appendChild(svgElement);
 
 }
 
@@ -154,7 +172,7 @@ let [theBoard, turnTracker] = initializeGame();
 
 
 //initialize screen with start button
-const btn1 = document.createElement('button');
+const btn1: any = document.createElement('button');
 btn1.textContent = 'Want to play tic-tac-toe?';
 btn1.setAttribute("name", "startGame");
 btn1.setAttribute("type", "button");
@@ -163,11 +181,15 @@ divBtn.appendChild(btn1);
 btn1.addEventListener('click', () => {
   // delete button one
   btn1.remove();
+  // Player 1 pick "x" or "o"
+const btn2X: any = 
   // reset game board
-  // initializeGame();
+  initializeGame();
+
   // draw board
-  drawSvgGrid(svgElement);
-  alert(Object.entries(`${svgElement.getBoundingClientRect()}`).map(([key, value]) => `${key}: ${value}`).join("; "));
+ drawBoard(divBtn);
+  // drawSvgGrid(svgElement);
+//  alert(Object.entries(`${svgElement.getBoundingClientRect()}`).map(([key, value]) => `${key}: ${value}`).join("; "));
 
 
   // Add selector for who goes first

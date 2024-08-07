@@ -1,6 +1,5 @@
 {
   "devDependencies": {
-    "@svgdotjs/svg.js": "^3.2.3",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.4"
   }
 }
