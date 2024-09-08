@@ -5,9 +5,7 @@
 /*        INCLUDE other files...        */
 /*                                      */
 /****************************************/
-/// <reference lib="es2017.object" />
-//import { SVG } from '@svgdotjs/svg.js';
-
+import * as Snap from 'snapsvg';
 
 
 /****************************************/
@@ -16,6 +14,7 @@
 /*                                      */
 /****************************************/
 
+/*  represents Tic-Tac-Toe grid  */
 class String3x3 {
   matrix: string[][];
   constructor(values: string[][]) {
@@ -31,10 +30,12 @@ class String3x3 {
     this.matrix[row][col] = value;
   }
 }
-class Num9x3 {
+
+/*  tracks each of 9 turns [player, row, col, value]*/
+class Num9x4 {
   matrix: number[][];
   constructor(values: number[][]) {
-    if (values.length !== 9 || values.some(row => row.length !== 3)) {
+    if (values.length !== 9 || values.some(row => row.length !== 4)) {
       throw new Error("Matrix must be 9x3.");
     }
     this.matrix = values;
@@ -75,34 +76,43 @@ const divSvg = document.getElementById("svg");
 /*                                      */
 /****************************************/
 
-function initializeGame(): [String3x3, Num9x3] {
-  const theBoard: String3x3 = new String3x3([
+function initializeGame(): [String3x3, Num9x4] {
+  let theBoard: String3x3 = new String3x3([
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
   ]);
-  const turnTracker: Num9x3 = new Num9x3([
-    [-1, -1, -1], //turn1: player, row, col
-    [-1, -1, -1], //turn2: ...
-    [-1, -1, -1], // -1 initial values
-    [-1, -1, -1], // for Player: 1=player1; 2=player2 
-    [-1, -1, -1], // for row/col: 0..2 (0-indexed)
-    [-1, -1, -1],
-    [-1, -1, -1],
-    [-1, -1, -1],
-    [-1, -1, -1]
+  let turnTracker: Num9x4 = new Num9x4([
+    [-1, -1, -1, -1], //turn1: [player, row, col, value]
+    [-1, -1, -1, -1], //turn2: ...
+    [-1, -1, -1, -1], // -1 initial values
+    [-1, -1, -1, -1], // for Player: 1=player1; 2=player2 
+    [-1, -1, -1, -1], // for row/col: 0..2 (0-indexed)
+    [-1, -1, -1, -1],
+    [-1, -1, -1, -1],
+    [-1, -1, -1, -1],
+    [-1, -1, -1, -1]
   ]);
   return [theBoard, turnTracker]
 }
 
-function drawBoard(divElement: any): any {
-  const strokeWidth: number = .01;
-  const strokeWidthHalf: number = strokeWidth/2;
+function drawBoard(divElement: any) {
+  const strokeWidthSingle = size/100;
+  const strokeWidthDouble = strokeWidthSingle*2;
   const boardBackgroundColor: string = "#FF9999"
   const player1Color: string = "#99FF99"
   const player2Color: string = "#9999FF"
 
-  var svgElement: any;
+  const svgImg = Snap("#game");
+  const third = size/3;
+  const rectUL = svgImg.rect(0,0,third,third);
+  rectUL.attr({
+    "fill": "none",
+    "stroke-width": strokeWidthSingle,
+    "stroke": "blue"
+  });
+
+
   svgElement.setAttributeNS(null, "width", `${size}`); // Set the desired width
   svgElement.setAttributeNS(null, "height", `${size}`);
   svgElement.setAttributeNS(null, 'viewBox', `${view}`);
@@ -110,21 +120,21 @@ function drawBoard(divElement: any): any {
 
   var g1 = document.createElementNS(svgNs, "g");
   g1.setAttributeNS(null,       "stroke", "black");
-  g1.setAttributeNS(null, "stroke-width", String(strokeWidth));
+  g1.setAttributeNS(null, "stroke-width", String(strokeWidthSingle));
 
   var rectBorder = document.createElementNS(svgNs, "rect");
-  rectBorder.setAttributeNS(null,      "x", String(strokeWidthHalf));
-  rectBorder.setAttributeNS(null,      "y", String(strokeWidthHalf));
+  rectBorder.setAttributeNS(null,      "x", String(strokeWidthDouble));
+  rectBorder.setAttributeNS(null,      "y", String(strokeWidthDouble));
   rectBorder.setAttributeNS(null,  "width", "100%");
   rectBorder.setAttributeNS(null, "height", "100%");
   rectBorder.setAttributeNS(null,   "fill", "pink");
   g1.appendChild(rectBorder);
 
   var rect0 = document.createElementNS(svgNs, "rect");
-  rect0.setAttributeNS(null,      "x", String(strokeWidthHalf));
-  rect0.setAttributeNS(null,      "y", String(strokeWidthHalf));
-  rect0.setAttributeNS(null,  "width", String(33.33333 - strokeWidthHalf));
-  rect0.setAttributeNS(null, "height", String(33.33333 - strokeWidthHalf));
+  rect0.setAttributeNS(null,      "x", String(strokeWidthSingle));
+  rect0.setAttributeNS(null,      "y", String(strokeWidthSingle));
+  rect0.setAttributeNS(null,  "width", String(33.33333 - strokeWidthDouble));
+  rect0.setAttributeNS(null, "height", String(33.33333 - strokeWidthSingle));
   rect0.setAttributeNS(null,   "fill", "green");
   g1.appendChild(rect0);
 

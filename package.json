@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "snapsvg": "^0.5.1"
+  },
+  "devDependencies": {
+    "@types/snapsvg": "^0.5.8"
+  }
+}

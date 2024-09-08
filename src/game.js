@@ -2,9 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /****************************************/
 /*                                      */
+/*        INCLUDE other files...        */
+/*                                      */
+/****************************************/
+var Snap = require("snapsvg");
+/****************************************/
+/*                                      */
 /*           DEFINE CLASSES             */
 /*                                      */
 /****************************************/
+/*  represents Tic-Tac-Toe grid  */
 var String3x3 = /** @class */ (function () {
     function String3x3(values) {
         if (values.length !== 3 || values.some(function (row) { return row.length !== 3; })) {
@@ -20,20 +27,21 @@ var String3x3 = /** @class */ (function () {
     };
     return String3x3;
 }());
-var Num9x3 = /** @class */ (function () {
-    function Num9x3(values) {
-        if (values.length !== 9 || values.some(function (row) { return row.length !== 3; })) {
+/*  tracks each of 9 turns [player, row, col, value]*/
+var Num9x4 = /** @class */ (function () {
+    function Num9x4(values) {
+        if (values.length !== 9 || values.some(function (row) { return row.length !== 4; })) {
             throw new Error("Matrix must be 9x3.");
         }
         this.matrix = values;
     }
-    Num9x3.prototype.getElement = function (row, col) {
+    Num9x4.prototype.getElement = function (row, col) {
         return this.matrix[row][col];
     };
-    Num9x3.prototype.setElement = function (row, col, value) {
+    Num9x4.prototype.setElement = function (row, col, value) {
         this.matrix[row][col] = value;
     };
-    return Num9x3;
+    return Num9x4;
 }());
 /****************************************/
 /*                                      */
@@ -59,45 +67,52 @@ function initializeGame() {
         ["", "", ""],
         ["", "", ""],
     ]);
-    var turnTracker = new Num9x3([
-        [-1, -1, -1], //turn1: player, row, col
-        [-1, -1, -1], //turn2: ...
-        [-1, -1, -1], // -1 initial values
-        [-1, -1, -1], // for Player: 1=player1; 2=player2 
-        [-1, -1, -1], // for row/col: 0..2 (0-indexed)
-        [-1, -1, -1],
-        [-1, -1, -1],
-        [-1, -1, -1],
-        [-1, -1, -1]
+    var turnTracker = new Num9x4([
+        [-1, -1, -1, -1], //turn1: [player, row, col, value]
+        [-1, -1, -1, -1], //turn2: ...
+        [-1, -1, -1, -1], // -1 initial values
+        [-1, -1, -1, -1], // for Player: 1=player1; 2=player2 
+        [-1, -1, -1, -1], // for row/col: 0..2 (0-indexed)
+        [-1, -1, -1, -1],
+        [-1, -1, -1, -1],
+        [-1, -1, -1, -1],
+        [-1, -1, -1, -1]
     ]);
     return [theBoard, turnTracker];
 }
 function drawBoard(divElement) {
-    var strokeWidth = .01;
-    var strokeWidthHalf = strokeWidth / 2;
+    var strokeWidthSingle = size / 100;
+    var strokeWidthDouble = strokeWidthSingle * 2;
     var boardBackgroundColor = "#FF9999";
     var player1Color = "#99FF99";
     var player2Color = "#9999FF";
-    var svgElement;
+    var svgImg = Snap("#game");
+    var third = size / 3;
+    var rectUL = svgImg.rect(0, 0, third, third);
+    rectUL.attr({
+        "fill": "none",
+        "stroke-width": strokeWidthSingle,
+        "stroke": "blue"
+    });
     svgElement.setAttributeNS(null, "width", "".concat(size)); // Set the desired width
     svgElement.setAttributeNS(null, "height", "".concat(size));
     svgElement.setAttributeNS(null, 'viewBox', "".concat(view));
     svgElement.style.backgroundColor = "#f0f0f0";
     var g1 = document.createElementNS(svgNs, "g");
     g1.setAttributeNS(null, "stroke", "black");
-    g1.setAttributeNS(null, "stroke-width", String(strokeWidth));
+    g1.setAttributeNS(null, "stroke-width", String(strokeWidthSingle));
     var rectBorder = document.createElementNS(svgNs, "rect");
-    rectBorder.setAttributeNS(null, "x", String(strokeWidthHalf));
-    rectBorder.setAttributeNS(null, "y", String(strokeWidthHalf));
+    rectBorder.setAttributeNS(null, "x", String(strokeWidthDouble));
+    rectBorder.setAttributeNS(null, "y", String(strokeWidthDouble));
     rectBorder.setAttributeNS(null, "width", "100%");
     rectBorder.setAttributeNS(null, "height", "100%");
     rectBorder.setAttributeNS(null, "fill", "pink");
     g1.appendChild(rectBorder);
     var rect0 = document.createElementNS(svgNs, "rect");
-    rect0.setAttributeNS(null, "x", String(strokeWidthHalf));
-    rect0.setAttributeNS(null, "y", String(strokeWidthHalf));
-    rect0.setAttributeNS(null, "width", String(33.33333 - strokeWidthHalf));
-    rect0.setAttributeNS(null, "height", String(33.33333 - strokeWidthHalf));
+    rect0.setAttributeNS(null, "x", String(strokeWidthSingle));
+    rect0.setAttributeNS(null, "y", String(strokeWidthSingle));
+    rect0.setAttributeNS(null, "width", String(33.33333 - strokeWidthDouble));
+    rect0.setAttributeNS(null, "height", String(33.33333 - strokeWidthSingle));
     rect0.setAttributeNS(null, "fill", "green");
     g1.appendChild(rect0);
     var lineLeft = document.createElementNS(svgNs, "line");
