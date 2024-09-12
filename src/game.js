@@ -50,12 +50,16 @@ var Num9x4 = /** @class */ (function () {
 /****************************************/
 var svgNs = "http://www.w3.org/2000/svg";
 var svgElement = document.createElementNS(svgNs, "svg");
-var screenWidth = window.screen.width;
-var screenHeight = window.screen.height;
-var size = (screenWidth < screenHeight ? screenWidth : screenHeight) * 0.9;
+var screenWidth = window.innerWidth;
+var screenHeight = window.innerHeight;
+var size = (screenWidth <= screenHeight ? screenWidth : screenHeight) * 0.9;
 var view = "0 0 ".concat(size, " ").concat(size);
-var divBtn = document.getElementById("game");
-var divSvg = document.getElementById("svg");
+var divGame = document.getElementById("game");
+var elementSvg = document.getElementById("svg");
+var boardBackgroundColor = "#FF9999";
+var boardLineColor = "#0000FF";
+var player1Color = "#99FF99";
+var player2Color = "#9999FF";
 /****************************************/
 /*                                      */
 /*           DEFINE FUNCTIONS           */
@@ -80,94 +84,26 @@ function initializeGame() {
     ]);
     return [theBoard, turnTracker];
 }
-function drawBoard(divElement) {
-    var strokeWidthSingle = size / 100;
-    var strokeWidthDouble = strokeWidthSingle * 2;
-    var boardBackgroundColor = "#FF9999";
-    var player1Color = "#99FF99";
-    var player2Color = "#9999FF";
-    var svgImg = Snap("#game");
+function drawBoard(size, boardBackgroundColor, boardLineColor, player1Color, player2Color) {
+    var strokeWidthSingle = size * 0.01;
+    var strokeWidthDouble = size * 0.02;
     var third = size / 3;
-    var rectUL = svgImg.rect(0, 0, third, third);
-    rectUL.attr({
-        "fill": "none",
+    var svgImg = Snap(size, size);
+    svgImg.attr({
+        "fill": boardBackgroundColor,
         "stroke-width": strokeWidthSingle,
-        "stroke": "blue"
+        "stroke": boardLineColor
     });
-    svgElement.setAttributeNS(null, "width", "".concat(size)); // Set the desired width
-    svgElement.setAttributeNS(null, "height", "".concat(size));
-    svgElement.setAttributeNS(null, 'viewBox', "".concat(view));
-    svgElement.style.backgroundColor = "#f0f0f0";
-    var g1 = document.createElementNS(svgNs, "g");
-    g1.setAttributeNS(null, "stroke", "black");
-    g1.setAttributeNS(null, "stroke-width", String(strokeWidthSingle));
-    var rectBorder = document.createElementNS(svgNs, "rect");
-    rectBorder.setAttributeNS(null, "x", String(strokeWidthDouble));
-    rectBorder.setAttributeNS(null, "y", String(strokeWidthDouble));
-    rectBorder.setAttributeNS(null, "width", "100%");
-    rectBorder.setAttributeNS(null, "height", "100%");
-    rectBorder.setAttributeNS(null, "fill", "pink");
-    g1.appendChild(rectBorder);
-    var rect0 = document.createElementNS(svgNs, "rect");
-    rect0.setAttributeNS(null, "x", String(strokeWidthSingle));
-    rect0.setAttributeNS(null, "y", String(strokeWidthSingle));
-    rect0.setAttributeNS(null, "width", String(33.33333 - strokeWidthDouble));
-    rect0.setAttributeNS(null, "height", String(33.33333 - strokeWidthSingle));
-    rect0.setAttributeNS(null, "fill", "green");
-    g1.appendChild(rect0);
-    var lineLeft = document.createElementNS(svgNs, "line");
-    lineLeft.setAttributeNS(null, "x1", "33.3333%");
-    lineLeft.setAttributeNS(null, "y1", "0");
-    lineLeft.setAttributeNS(null, "x2", "33.3333%");
-    lineLeft.setAttributeNS(null, "y2", "100%");
-    g1.appendChild(lineLeft);
-    var lineRight = document.createElementNS(svgNs, "line");
-    lineRight.setAttributeNS(null, "x1", "66.6666%");
-    lineRight.setAttributeNS(null, "y1", "0");
-    lineRight.setAttributeNS(null, "x2", "66.6666%");
-    lineRight.setAttributeNS(null, "y2", "100%");
-    g1.appendChild(lineRight);
-    var lineUpper = document.createElementNS(svgNs, "line");
-    lineUpper.setAttributeNS(null, "y1", "33.3333%");
-    lineUpper.setAttributeNS(null, "x1", "0");
-    lineUpper.setAttributeNS(null, "y2", "33.3333%");
-    lineUpper.setAttributeNS(null, "x2", "100%");
-    g1.appendChild(lineUpper);
-    var lineLower = document.createElementNS(svgNs, "line");
-    lineLower.setAttributeNS(null, "y1", "66.6666%");
-    lineLower.setAttributeNS(null, "x1", "0");
-    lineLower.setAttributeNS(null, "y2", "66.6666%");
-    lineLower.setAttributeNS(null, "x2", "100%");
-    g1.appendChild(lineLower);
-    svgElement.appendChild(g1);
-    divElement.appendChild(svgElement);
+    var rectUL = svgImg.rect(0, 0, third, third);
+    var rectUC = svgImg.rect(third, 0, third, third);
+    var rectUR = svgImg.rect(third * 2, 0, third, third);
+    var rectCL = svgImg.rect(0, third, third, third);
+    var rectCC = svgImg.rect(third, third, third, third);
+    var rectCR = svgImg.rect(third * 2, third, third, third);
+    var rectBL = svgImg.rect(0, third * 2, third, third);
+    var rectBC = svgImg.rect(third, third * 2, third, third);
+    var rectBR = svgImg.rect(third * 2, third * 2, third, third);
 }
-var _a = initializeGame(), theBoard = _a[0], turnTracker = _a[1];
-//initialize screen with start button
-var btn1 = document.createElement('button');
-btn1.textContent = 'Want to play tic-tac-toe?';
-btn1.setAttribute("name", "startGame");
-btn1.setAttribute("type", "button");
-divBtn.appendChild(btn1);
-btn1.addEventListener('click', function () {
-    // delete button one
-    btn1.remove();
-    // Player 1 pick "x" or "o"
-    var btn2X = 
-    // reset game board
-    initializeGame();
-    // draw board
-    drawBoard(divBtn);
-    // drawSvgGrid(svgElement);
-    //  alert(Object.entries(`${svgElement.getBoundingClientRect()}`).map(([key, value]) => `${key}: ${value}`).join("; "));
-    // Add selector for who goes first
-    //Capture input
-    //redraw board
-    //Record move
-    //Win? or Repeat
-    // Display win
-    //reset game
-});
 function drawSvgGrid(svgElement) {
     svgElement.setAttributeNS(null, "width", "".concat(size)); // Set the desired width
     svgElement.setAttributeNS(null, "height", "".concat(size));
@@ -208,8 +144,47 @@ function drawSvgGrid(svgElement) {
     lineLower.setAttributeNS(null, "x2", "100%");
     g1.appendChild(lineLower);
     svgElement.appendChild(g1);
-    divBtn.appendChild(svgElement);
+    divGame.appendChild(svgElement);
 }
+// let [theBoard, turnTracker] = initializeGame();
+//initialize screen with start button
+var btnStartGame = document.createElement('button');
+btnStartGame.textContent = 'Want to play tic-tac-toe?';
+btnStartGame.setAttribute("name", "startGame");
+btnStartGame.setAttribute("type", "button");
+divGame.appendChild(btnStartGame);
+/*
+<!-- Rounded switch -->
+  Player 1 Symbol:
+  <label class="switch" for="Player1Symbol">
+    <input type="checkbox" id="Player1Symbol">
+    <span class="slider round"></span>
+  </label>
+*/
+var chkBoxPlayer1Symbol = document.createElement('input');
+chkBoxPlayer1Symbol.setAttribute("type", "checkbox");
+chkBoxPlayer1Symbol.setAttribute("id", "Player1Symbol");
+chkBoxPlayer1Symbol.setAttribute("name", "Player1Symbol");
+divGame.appendChild(chkBoxPlayer1Symbol);
+btnStartGame.addEventListener('click', function () {
+    // delete button one
+    // btnStartGame.remove();
+    // Player 1 pick "x" or "o"
+    //  const btnPlayer1SymbolX: any = document.getElementById("Player1Symbol");
+    // reset game board
+    //  initializeGame();
+    // draw board
+    // drawBoard(size, boardBackgroundColor, boardLineColor, player1Color, player2Color); 
+    // drawSvgGrid(svgElement);
+    //  alert(Object.entries(`${svgElement.getBoundingClientRect()}`).map(([key, value]) => `${key}: ${value}`).join("; "));
+    // Add selector for who goes first
+    //Capture input
+    //redraw board
+    //Record move
+    //Win? or Repeat
+    // Display win
+    //reset game
+});
 /*
 alert(Object.entries(`${svgElement.getBoundingClientRect()}`).map(([key, value]) => `${key}: ${value}`).join("; "));
 

@@ -55,14 +55,15 @@ class Num9x4 {
 /*                                      */
 /****************************************/
 
-const svgNs = "http://www.w3.org/2000/svg";
-const svgElement = document.createElementNS(svgNs, "svg");
-const screenWidth = window.screen.width;
-const screenHeight = window.screen.height;
-const size: number = (screenWidth < screenHeight ? screenWidth : screenHeight) * 0.9;
-const view = `0 0 ${size} ${size}`;
-const divBtn = document.getElementById("game");
-const divSvg = document.getElementById("svg");
+const screenWidth:number = window.innerWidth;
+const screenHeight:number = window.innerHeight;
+const size:number = (screenWidth <= screenHeight ? screenWidth : screenHeight) * 0.9;
+const view:string = `0 0 ${size} ${size}`;
+const divGame:any = document.getElementById("game");
+const boardBackgroundColor: string = "#FF9999";
+const boardLineColor: string = "#0000FF";
+const player1Color: string = "#99FF99";
+const player2Color: string = "#9999FF";
 
 
 
@@ -96,132 +97,34 @@ function initializeGame(): [String3x3, Num9x4] {
   return [theBoard, turnTracker]
 }
 
-function drawBoard(divElement: any) {
-  const strokeWidthSingle = size/100;
-  const strokeWidthDouble = strokeWidthSingle*2;
-  const boardBackgroundColor: string = "#FF9999"
-  const player1Color: string = "#99FF99"
-  const player2Color: string = "#9999FF"
-
-  const svgImg = Snap("#game");
+function drawBoard(
+    size: number, 
+    boardBackgroundColor: string, 
+    boardLineColor: string, 
+    player1Color: string, 
+    player2Color: string) 
+{
+  const strokeWidthSingle = size*0.01;
+  const strokeWidthDouble = size*0.02;
   const third = size/3;
-  const rectUL = svgImg.rect(0,0,third,third);
-  rectUL.attr({
-    "fill": "none",
+
+  const svgImg = Snap(size,size);
+  svgImg.attr({
+    "fill": boardBackgroundColor,
     "stroke-width": strokeWidthSingle,
-    "stroke": "blue"
+    "stroke": boardLineColor
   });
-
-
-  svgElement.setAttributeNS(null, "width", `${size}`); // Set the desired width
-  svgElement.setAttributeNS(null, "height", `${size}`);
-  svgElement.setAttributeNS(null, 'viewBox', `${view}`);
-  svgElement.style.backgroundColor = "#f0f0f0";
-
-  var g1 = document.createElementNS(svgNs, "g");
-  g1.setAttributeNS(null,       "stroke", "black");
-  g1.setAttributeNS(null, "stroke-width", String(strokeWidthSingle));
-
-  var rectBorder = document.createElementNS(svgNs, "rect");
-  rectBorder.setAttributeNS(null,      "x", String(strokeWidthDouble));
-  rectBorder.setAttributeNS(null,      "y", String(strokeWidthDouble));
-  rectBorder.setAttributeNS(null,  "width", "100%");
-  rectBorder.setAttributeNS(null, "height", "100%");
-  rectBorder.setAttributeNS(null,   "fill", "pink");
-  g1.appendChild(rectBorder);
-
-  var rect0 = document.createElementNS(svgNs, "rect");
-  rect0.setAttributeNS(null,      "x", String(strokeWidthSingle));
-  rect0.setAttributeNS(null,      "y", String(strokeWidthSingle));
-  rect0.setAttributeNS(null,  "width", String(33.33333 - strokeWidthDouble));
-  rect0.setAttributeNS(null, "height", String(33.33333 - strokeWidthSingle));
-  rect0.setAttributeNS(null,   "fill", "green");
-  g1.appendChild(rect0);
-
-
-  var lineLeft = document.createElementNS(svgNs, "line");
-  lineLeft.setAttributeNS(null, "x1", "33.3333%");
-  lineLeft.setAttributeNS(null, "y1",        "0");
-  lineLeft.setAttributeNS(null, "x2", "33.3333%");
-  lineLeft.setAttributeNS(null, "y2",     "100%");
-  g1.appendChild(lineLeft);
-
-  var lineRight = document.createElementNS(svgNs, "line");
-  lineRight.setAttributeNS(null, "x1", "66.6666%");
-  lineRight.setAttributeNS(null, "y1", "0");
-  lineRight.setAttributeNS(null, "x2", "66.6666%");
-  lineRight.setAttributeNS(null, "y2", "100%");
-  g1.appendChild(lineRight);
-
-
-  var lineUpper = document.createElementNS(svgNs, "line");
-  lineUpper.setAttributeNS(null, "y1", "33.3333%");
-  lineUpper.setAttributeNS(null, "x1", "0");
-  lineUpper.setAttributeNS(null, "y2", "33.3333%");
-  lineUpper.setAttributeNS(null, "x2", "100%");
-  g1.appendChild(lineUpper);
-
-
-  var lineLower = document.createElementNS(svgNs, "line");
-  lineLower.setAttributeNS(null, "y1", "66.6666%");
-  lineLower.setAttributeNS(null, "x1", "0");
-  lineLower.setAttributeNS(null, "y2", "66.6666%");
-  lineLower.setAttributeNS(null, "x2", "100%");
-  g1.appendChild(lineLower);
-
-  svgElement.appendChild(g1);
-  divElement.appendChild(svgElement);
+  const rectUL = svgImg.rect(      0,      0,third,third);
+  const rectUC = svgImg.rect(  third,      0,third,third);
+  const rectUR = svgImg.rect(third*2,      0,third,third);
+  const rectCL = svgImg.rect(      0,  third,third,third);
+  const rectCC = svgImg.rect(  third,  third,third,third);
+  const rectCR = svgImg.rect(third*2,  third,third,third);
+  const rectBL = svgImg.rect(      0,third*2,third,third);
+  const rectBC = svgImg.rect(  third,third*2,third,third);
+  const rectBR = svgImg.rect(third*2,third*2,third,third);
 
 }
-
-
-
-
-let [theBoard, turnTracker] = initializeGame();
-
-
-
-//initialize screen with start button
-const btn1: any = document.createElement('button');
-btn1.textContent = 'Want to play tic-tac-toe?';
-btn1.setAttribute("name", "startGame");
-btn1.setAttribute("type", "button");
-divBtn.appendChild(btn1);
-
-btn1.addEventListener('click', () => {
-  // delete button one
-  btn1.remove();
-  // Player 1 pick "x" or "o"
-const btn2X: any = 
-  // reset game board
-  initializeGame();
-
-  // draw board
- drawBoard(divBtn);
-  // drawSvgGrid(svgElement);
-//  alert(Object.entries(`${svgElement.getBoundingClientRect()}`).map(([key, value]) => `${key}: ${value}`).join("; "));
-
-
-  // Add selector for who goes first
-
-  //Capture input
-
-  //redraw board
-
-  //Record move
-
-  //Win? or Repeat
-
-  // Display win
-
-  //reset game
-
-
-});
-
-
-
-
 
 function drawSvgGrid(svgElement: any) {
   svgElement.setAttributeNS(null, "width", `${size}`); // Set the desired width
@@ -272,58 +175,69 @@ function drawSvgGrid(svgElement: any) {
   g1.appendChild(lineLower);
 
   svgElement.appendChild(g1);
-  divBtn.appendChild(svgElement);
+  divGame.appendChild(svgElement);
 
 
 }
 
+
+// let [theBoard, turnTracker] = initializeGame();
+
+
+
+//initialize screen with start button
+const btnStartGame: any = document.createElement('button');
+btnStartGame.textContent = 'Want to play tic-tac-toe?';
+btnStartGame.setAttribute("name", "startGame");
+btnStartGame.setAttribute("type", "button");
+divGame.appendChild(btnStartGame);
+
 /*
-alert(Object.entries(`${svgElement.getBoundingClientRect()}`).map(([key, value]) => `${key}: ${value}`).join("; "));
-
+<!-- Rounded switch -->
+  Player 1 Symbol:
+  <label class="switch" for="Player1Symbol">
+    <input type="checkbox" id="Player1Symbol">
+    <span class="slider round"></span>
+  </label>
 */
+const chkBoxPlayer1Symbol:any = document.createElement('input');
+chkBoxPlayer1Symbol.setAttribute("type", "checkbox");
+chkBoxPlayer1Symbol.setAttribute("id", "Player1Symbol");
+chkBoxPlayer1Symbol.setAttribute("name", "Player1Symbol");
+divGame.appendChild(chkBoxPlayer1Symbol);
+
+btnStartGame.addEventListener('click', () => {
+  // delete button one
+ // btnStartGame.remove();
+  // Player 1 pick "x" or "o"
+//  const btnPlayer1SymbolX: any = document.getElementById("Player1Symbol");
+  // reset game board
+//  initializeGame();
+
+  // draw board
+  // drawBoard(size, boardBackgroundColor, boardLineColor, player1Color, player2Color); 
+
+  // drawSvgGrid(svgElement);
+//  alert(Object.entries(`${svgElement.getBoundingClientRect()}`).map(([key, value]) => `${key}: ${value}`).join("; "));
 
 
-document.addEventListener('pointerup', (event) => {
-  if (event.pointerType === 'touch') {
-    let col: number = null, row: number = null;
+  // Add selector for who goes first
 
-    if (event.clientX <= screenWidth * 1 / 3) { col = 0; }
-    else if (event.clientX <= (screenWidth) * 2 / 3) { col = 1; }
-    else { col = 2; }
+  //Capture input
 
-    if (event.clientX <= screenWidth * 1 / 3) { row = 0; }
-    else if (event.clientX <= (screenWidth) * 2 / 3) { row = 1; }
-    else { row = 2; }
-  } else if (event.pointerType === 'mouse') { }
+  //redraw board
+
+  //Record move
+
+  //Win? or Repeat
+
+  // Display win
+
+  //reset game
+
+
 });
 
 
 
 
-
-
-/*
-event.clientX
-event.clientY:
-event.target
-.pointerType
-.isPrimary -- used to detect first finger
-
-   */
-
-
-function handleEvent(event) {
-  const y = event.clientY;
-  const screenHeight = window.innerHeight;
-
-  switch (true) {
-    case y < screenHeight / 3:
-      console.log('Event in first third');
-      break;
-    case y < (2 * screenHeight) / 3:
-      console.log('Event in middle third');
-      break;
-    default:
-      console.log('Event in last third');
-  }
-}
