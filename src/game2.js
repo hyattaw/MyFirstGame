@@ -1,0 +1,14 @@
+var screenWidth = window.innerWidth;
+var screenHeight = window.innerHeight;
+var size = (screenWidth <= screenHeight ? screenWidth : screenHeight) * 0.9;
+var view = "0 0 ".concat(size, " ").concat(size);
+var boardBackgroundColor = "#FF9999";
+var boardLineColor = "#0000FF";
+var player1Color = "#99FF99";
+var player2Color = "#9999FF";
+var divGame = document.createElement("div");
+divGame.setAttribute("id", "game");
+//divGame.innerHTML = "test for adding a div";
+const divText = document.createTextNode("test for adding a div");
+divGame.appendChild(divText);
+document.body.appendChild(divGame);

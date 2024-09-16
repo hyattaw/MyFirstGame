@@ -48,18 +48,17 @@ var Num9x4 = /** @class */ (function () {
 /*         DECLARE VARIABLES            */
 /*                                      */
 /****************************************/
-var svgNs = "http://www.w3.org/2000/svg";
-var svgElement = document.createElementNS(svgNs, "svg");
 var screenWidth = window.innerWidth;
 var screenHeight = window.innerHeight;
 var size = (screenWidth <= screenHeight ? screenWidth : screenHeight) * 0.9;
 var view = "0 0 ".concat(size, " ").concat(size);
-var divGame = document.getElementById("game");
-var elementSvg = document.getElementById("svg");
 var boardBackgroundColor = "#FF9999";
 var boardLineColor = "#0000FF";
 var player1Color = "#99FF99";
 var player2Color = "#9999FF";
+var divGame = document.createElement('div');
+divGame.setAttribute("id", "game");
+document.body.appendChild(divGame);
 /****************************************/
 /*                                      */
 /*           DEFINE FUNCTIONS           */
@@ -104,54 +103,13 @@ function drawBoard(size, boardBackgroundColor, boardLineColor, player1Color, pla
     var rectBC = svgImg.rect(third, third * 2, third, third);
     var rectBR = svgImg.rect(third * 2, third * 2, third, third);
 }
-function drawSvgGrid(svgElement) {
-    svgElement.setAttributeNS(null, "width", "".concat(size)); // Set the desired width
-    svgElement.setAttributeNS(null, "height", "".concat(size));
-    svgElement.setAttributeNS(null, 'viewBox', "".concat(view));
-    svgElement.style.backgroundColor = "#f0f0f0";
-    var g1 = document.createElementNS(svgNs, "g");
-    g1.setAttributeNS(null, "stroke", "black");
-    g1.setAttributeNS(null, "stroke-width", "1%");
-    var rectBorder = document.createElementNS(svgNs, "rect");
-    rectBorder.setAttributeNS(null, "x", "0");
-    rectBorder.setAttributeNS(null, "y", "0");
-    rectBorder.setAttributeNS(null, "width", "100%");
-    rectBorder.setAttributeNS(null, "height", "100%");
-    rectBorder.setAttributeNS(null, "fill", "pink");
-    g1.appendChild(rectBorder);
-    var lineLeft = document.createElementNS(svgNs, "line");
-    lineLeft.setAttributeNS(null, "x1", "33.3333%");
-    lineLeft.setAttributeNS(null, "y1", "0");
-    lineLeft.setAttributeNS(null, "x2", "33.3333%");
-    lineLeft.setAttributeNS(null, "y2", "100%");
-    g1.appendChild(lineLeft);
-    var lineRight = document.createElementNS(svgNs, "line");
-    lineRight.setAttributeNS(null, "x1", "66.6666%");
-    lineRight.setAttributeNS(null, "y1", "0");
-    lineRight.setAttributeNS(null, "x2", "66.6666%");
-    lineRight.setAttributeNS(null, "y2", "100%");
-    g1.appendChild(lineRight);
-    var lineUpper = document.createElementNS(svgNs, "line");
-    lineUpper.setAttributeNS(null, "y1", "33.3333%");
-    lineUpper.setAttributeNS(null, "x1", "0");
-    lineUpper.setAttributeNS(null, "y2", "33.3333%");
-    lineUpper.setAttributeNS(null, "x2", "100%");
-    g1.appendChild(lineUpper);
-    var lineLower = document.createElementNS(svgNs, "line");
-    lineLower.setAttributeNS(null, "y1", "66.6666%");
-    lineLower.setAttributeNS(null, "x1", "0");
-    lineLower.setAttributeNS(null, "y2", "66.6666%");
-    lineLower.setAttributeNS(null, "x2", "100%");
-    g1.appendChild(lineLower);
-    svgElement.appendChild(g1);
-    divGame.appendChild(svgElement);
-}
 // let [theBoard, turnTracker] = initializeGame();
 //initialize screen with start button
 var btnStartGame = document.createElement('button');
-btnStartGame.textContent = 'Want to play tic-tac-toe?';
+btnStartGame.innerHTML = "Click to play tic-tac-toe";
 btnStartGame.setAttribute("name", "startGame");
 btnStartGame.setAttribute("type", "button");
+btnStartGame.setAttribute("id", "btnStartGame");
 divGame.appendChild(btnStartGame);
 /*
 <!-- Rounded switch -->
@@ -185,53 +143,3 @@ btnStartGame.addEventListener('click', function () {
     // Display win
     //reset game
 });
-/*
-alert(Object.entries(`${svgElement.getBoundingClientRect()}`).map(([key, value]) => `${key}: ${value}`).join("; "));
-
-*/
-document.addEventListener('pointerup', function (event) {
-    if (event.pointerType === 'touch') {
-        var col = null, row = null;
-        if (event.clientX <= screenWidth * 1 / 3) {
-            col = 0;
-        }
-        else if (event.clientX <= (screenWidth) * 2 / 3) {
-            col = 1;
-        }
-        else {
-            col = 2;
-        }
-        if (event.clientX <= screenWidth * 1 / 3) {
-            row = 0;
-        }
-        else if (event.clientX <= (screenWidth) * 2 / 3) {
-            row = 1;
-        }
-        else {
-            row = 2;
-        }
-    }
-    else if (event.pointerType === 'mouse') { }
-});
-/*
-event.clientX
-event.clientY:
-event.target
-.pointerType
-.isPrimary -- used to detect first finger
-
-   */
-function handleEvent(event) {
-    var y = event.clientY;
-    var screenHeight = window.innerHeight;
-    switch (true) {
-        case y < screenHeight / 3:
-            console.log('Event in first third');
-            break;
-        case y < (2 * screenHeight) / 3:
-            console.log('Event in middle third');
-            break;
-        default:
-            console.log('Event in last third');
-    }
-}

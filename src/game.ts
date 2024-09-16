@@ -59,12 +59,13 @@ const screenWidth:number = window.innerWidth;
 const screenHeight:number = window.innerHeight;
 const size:number = (screenWidth <= screenHeight ? screenWidth : screenHeight) * 0.9;
 const view:string = `0 0 ${size} ${size}`;
-const divGame:any = document.getElementById("game");
 const boardBackgroundColor: string = "#FF9999";
 const boardLineColor: string = "#0000FF";
 const player1Color: string = "#99FF99";
 const player2Color: string = "#9999FF";
-
+const divGame:any = document.createElement('div');
+divGame.setAttribute("id", "game");
+document.body.appendChild(divGame);
 
 
 
@@ -126,70 +127,16 @@ function drawBoard(
 
 }
 
-function drawSvgGrid(svgElement: any) {
-  svgElement.setAttributeNS(null, "width", `${size}`); // Set the desired width
-  svgElement.setAttributeNS(null, "height", `${size}`);
-  svgElement.setAttributeNS(null, 'viewBox', `${view}`);
-  svgElement.style.backgroundColor = "#f0f0f0";
-
-  var g1 = document.createElementNS(svgNs, "g");
-  g1.setAttributeNS(null, "stroke", "black");
-  g1.setAttributeNS(null, "stroke-width", "1%");
-
-  var rectBorder = document.createElementNS(svgNs, "rect");
-  rectBorder.setAttributeNS(null, "x", "0");
-  rectBorder.setAttributeNS(null, "y", "0");
-  rectBorder.setAttributeNS(null, "width", "100%");
-  rectBorder.setAttributeNS(null, "height", "100%");
-  rectBorder.setAttributeNS(null, "fill", "pink");
-  g1.appendChild(rectBorder);
-
-  var lineLeft = document.createElementNS(svgNs, "line");
-  lineLeft.setAttributeNS(null, "x1", "33.3333%");
-  lineLeft.setAttributeNS(null, "y1", "0");
-  lineLeft.setAttributeNS(null, "x2", "33.3333%");
-  lineLeft.setAttributeNS(null, "y2", "100%");
-  g1.appendChild(lineLeft);
-
-  var lineRight = document.createElementNS(svgNs, "line");
-  lineRight.setAttributeNS(null, "x1", "66.6666%");
-  lineRight.setAttributeNS(null, "y1", "0");
-  lineRight.setAttributeNS(null, "x2", "66.6666%");
-  lineRight.setAttributeNS(null, "y2", "100%");
-  g1.appendChild(lineRight);
-
-
-  var lineUpper = document.createElementNS(svgNs, "line");
-  lineUpper.setAttributeNS(null, "y1", "33.3333%");
-  lineUpper.setAttributeNS(null, "x1", "0");
-  lineUpper.setAttributeNS(null, "y2", "33.3333%");
-  lineUpper.setAttributeNS(null, "x2", "100%");
-  g1.appendChild(lineUpper);
-
-
-  var lineLower = document.createElementNS(svgNs, "line");
-  lineLower.setAttributeNS(null, "y1", "66.6666%");
-  lineLower.setAttributeNS(null, "x1", "0");
-  lineLower.setAttributeNS(null, "y2", "66.6666%");
-  lineLower.setAttributeNS(null, "x2", "100%");
-  g1.appendChild(lineLower);
-
-  svgElement.appendChild(g1);
-  divGame.appendChild(svgElement);
-
-
-}
-
-
 // let [theBoard, turnTracker] = initializeGame();
 
 
 
 //initialize screen with start button
 const btnStartGame: any = document.createElement('button');
-btnStartGame.textContent = 'Want to play tic-tac-toe?';
+btnStartGame.innerHTML = "Click to play tic-tac-toe";
 btnStartGame.setAttribute("name", "startGame");
 btnStartGame.setAttribute("type", "button");
+btnStartGame.setAttribute("id", "btnStartGame");
 divGame.appendChild(btnStartGame);
 
 /*
