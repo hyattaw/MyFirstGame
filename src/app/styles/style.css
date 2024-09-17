@@ -3,17 +3,41 @@ body {
   width: 95%; 
   margin: auto;
   text-align: center;
+  font-size: 1.5em
 }
+
+.circle {
+  height: 75px;
+  width: 75px;
+  border-radius: 50%;
+  background-color: #333;
+  display: block;
+  margin: auto;
+  place-content: center;
+  animation: grow 5s infinite;
+}
+.circle > span {
+  color: #eee;
+  font-size: 2em;
+}
+
+@keyframes grow {
+    0% {box-shadow: 0px 0px .1em #000;}
+   50% {box-shadow: 0px 0px 3em #000;}
+  100% {box-shadow: 0px 0px .1em #000;}
+}
+
 .button {
   border: none;
-  color: darkgoldenrod;
+  color: black;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   display: block;
-  font-size: 24px;
-  margin: 4px 2px;
+  font-size: 2em;
+  margin: auto;
   background-color: #008CBA;
+  border-radius: 50%;
 }
 
 div {
@@ -25,39 +49,7 @@ div {
 }
 
 
-.custom-alert {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #f1f1f1;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  display: none;
-  max-width: 300px;
-}
-.custom-alert-title {
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-.close-button {
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-.show-alert-button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-/* The switch - the box around the slider */
+/* The switch - the div around the slider */
 .switch {
   position: relative;
   display: inline-block;
@@ -72,7 +64,7 @@ div {
   height: 0;
 }
 
-/* The slider */
+/* The slider container (background)*/
 .slider {
   position: absolute;
   cursor: pointer;
@@ -81,6 +73,7 @@ div {
   right: 0;
   bottom: 0;
   background-color: #2196F3;
+  border-radius: 10px;
   -webkit-transition: .4s;
   transition: .4s;
 }
@@ -94,6 +87,7 @@ div {
   left: 4px;
   bottom: 4px;
   background-color: white;
+  border-radius: 50%;
   -webkit-transition: .4s;
   transition: .4s;
 }

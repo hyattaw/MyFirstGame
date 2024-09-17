@@ -6,8 +6,8 @@ const boardBackgroundColor: string = "#FF9999";
 const boardLineColor: string = "#0000FF";
 const player1Color: string = "#99FF99";
 const player2Color: string = "#9999FF";
-const divGame: any = document.createElement('div');
-//divGame.setAttribute("id", "game");
-divGame.innerHTML = "test for adding a div";
+
+const divGame = document.createElement("div");
+divGame.innerHTML = "<p style='font-size:3em;'>Hello</p>"
 document.body.appendChild(divGame);
 
