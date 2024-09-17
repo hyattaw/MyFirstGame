@@ -1,4 +1,4 @@
-import Snap from "snapsvg";
+import Snap from 'imports-loader?this=>window,fix=>module.exports=0!snapsvg/dist/snap.svg.js';
 
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
@@ -60,7 +60,7 @@ function fnStartGame(){
 /*  represents Tic-Tac-Toe grid  */
 var String3x3 = /** @class */ (function () {
     function String3x3(values) {
-        if (values.length !== 3 || values.some(function (row) { return row.length !== 3; })) {
+       if (values.length !== 3 || values.some(function (row) { return row.length !== 3; })) {
             throw new Error("Matrix must be 3x3.");
         }
         this.matrix = values;
@@ -131,4 +131,3 @@ function drawBoard(size, boardBackgroundColor, boardLineColor, player1Color, pla
     var rectBC = svgImg.rect(third, third * 2, third, third);
     var rectBR = svgImg.rect(third * 2, third * 2, third, third);
 }
-
