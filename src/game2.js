@@ -1,5 +1,3 @@
-import Snap from 'imports-loader?this=>window,fix=>module.exports=0!snapsvg/dist/snap.svg.js';
-
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
 const size = (screenWidth <= screenHeight ? screenWidth : screenHeight) * 0.9;
@@ -55,6 +53,8 @@ function fnStartGame(){
     pPlayerSymb.setAttribute("id","pPlayerSymb");
     pPlayerSymb.innerHTML = `Player1 Symbol is ${strPlayer1Symbol}`;
     document.body.appendChild(pPlayerSymb);
+    initializeGame();
+    drawBoard(size/2, boardBackgroundColor, boardLineColor, player1Color, player2Color)
 }
 
 /*  represents Tic-Tac-Toe grid  */
